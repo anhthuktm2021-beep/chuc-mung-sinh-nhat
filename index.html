@@ -13,21 +13,21 @@
             font-family: 'Quicksand', sans-serif;
             height: 100vh;
             width: 100vw;
-            perspective: 1200px;
+            perspective: 1000px; /* Giảm perspective một chút để tối ưu 3D trên mobile */
             cursor: crosshair; 
         }
 
         /* --- MÀN HÌNH CHỜ (START SCREEN) --- */
         #start-screen {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #050010; /* Màu nền tối bí ẩn */
-            z-index: 9999; /* Luôn nổi lên trên cùng */
+            background: #050010; 
+            z-index: 9999; 
             display: flex; align-items: center; justify-content: center;
-            transition: opacity 1.5s ease-out; /* Hiệu ứng mờ dần cực êm */
+            transition: opacity 1s ease-out; 
         }
 
         #start-btn {
-            padding: 20px 40px; font-size: 1.8rem; 
+            padding: 20px 40px; font-size: 1.5rem; 
             font-family: 'Quicksand', sans-serif; font-weight: 800;
             background: linear-gradient(45deg, #ff007f, #ff66cc);
             color: white; border: none; border-radius: 50px;
@@ -37,8 +37,8 @@
         }
 
         @keyframes pulseBtn {
-            0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 51, 153, 0.8); }
-            100% { transform: scale(1.05); box-shadow: 0 0 50px rgba(255, 51, 153, 1); }
+            0% { transform: scale(1); box-shadow: 0 0 15px rgba(255, 51, 153, 0.6); }
+            100% { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 51, 153, 1); }
         }
 
         /* SAO NỀN */
@@ -49,10 +49,11 @@
         .bg-star {
             position: absolute; border-radius: 50%; background: #fff;
             animation: twinkleBg 3s infinite alternate ease-in-out;
+            will-change: opacity; /* Tối ưu GPU */
         }
         @keyframes twinkleBg {
             0% { opacity: 0.1; }
-            100% { opacity: 0.9; box-shadow: 0 0 10px #ffccf2; }
+            100% { opacity: 0.8; } /* Bỏ box-shadow ở keyframe để tránh lag */
         }
 
         /* SAO BĂNG */
@@ -60,17 +61,19 @@
             position: absolute; width: 100px; height: 2px;
             background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 204, 255, 1));
             transform: rotate(-45deg); animation: shoot 2s linear forwards; pointer-events: none;
+            will-change: transform;
         }
         @keyframes shoot {
             0% { transform: translate(100vw, -20vh) rotate(-45deg); opacity: 1; }
             100% { transform: translate(-20vw, 100vh) rotate(-45deg); opacity: 0; }
         }
 
-        /* BỤI TIÊN THEO CHUỘT */
+        /* BỤI TIÊN THEO CHUỘT (Chỉ chạy mượt trên PC) */
         .mouse-trail {
             position: absolute; width: 6px; height: 6px;
             background: #ff99cc; border-radius: 50%; pointer-events: none;
-            box-shadow: 0 0 10px #ff66b2; animation: fadeTrail 1s ease-out forwards; z-index: 100;
+            animation: fadeTrail 0.8s ease-out forwards; z-index: 100;
+            will-change: transform, opacity;
         }
         @keyframes fadeTrail {
             0% { opacity: 1; transform: scale(1) translateY(0); }
@@ -81,44 +84,40 @@
         .scene {
             position: absolute; top: 50%; left: 50%; transform-style: preserve-3d;
             animation: levitate 6s ease-in-out infinite; z-index: 10;
+            will-change: transform;
         }
         @keyframes levitate {
             0%, 100% { transform: rotateX(-10deg) translateY(0px); }
-            50% { transform: rotateX(-10deg) translateY(-20px); }
+            50% { transform: rotateX(-10deg) translateY(-15px); }
         }
 
         /* HÀO QUANG BÁNH KEM */
         .cake-aura {
             position: absolute; top: -50px; left: -150px; width: 300px; height: 200px;
-            background: radial-gradient(ellipse at center, rgba(255, 51, 153, 0.3) 0%, rgba(0,0,0,0) 70%);
-            transform: rotateX(90deg); filter: blur(20px); pointer-events: none;
+            background: radial-gradient(ellipse at center, rgba(255, 51, 153, 0.2) 0%, rgba(0,0,0,0) 70%);
+            transform: rotateX(90deg); filter: blur(15px); pointer-events: none;
         }
 
         /* BÁNH KEM */
         .cake-core { position: absolute; transform-style: preserve-3d; }
         .cake-particle {
             position: absolute; border-radius: 50%; transform-style: preserve-3d;
-            animation: cakeGlow 2s infinite alternate ease-in-out;
-        }
-        @keyframes cakeGlow {
-            0% { opacity: 0.8; box-shadow: 0 0 5px #ff3399; }
-            100% { opacity: 1; box-shadow: 0 0 15px #ff99cc; }
         }
 
         /* NẾN TRÊN ĐỈNH BÁNH */
         .candle {
             position: absolute; top: -120px; left: -2px;
             width: 4px; height: 50px; background: #fff; border-radius: 2px;
-            box-shadow: 0 0 15px #fff, 0 0 30px #ff007f;
+            box-shadow: 0 0 10px #fff, 0 0 20px #ff007f;
         }
         .flame {
             position: absolute; top: -20px; left: -8px;
             width: 20px; height: 20px; background: #fff; border-radius: 50%;
-            box-shadow: 0 0 20px #fff, 0 0 40px #ffcc00; animation: flicker 0.2s infinite alternate;
+            box-shadow: 0 0 15px #fff, 0 0 30px #ffcc00; animation: flicker 0.2s infinite alternate;
         }
         @keyframes flicker {
             0% { transform: scale(1); opacity: 0.9; }
-            100% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1.1); opacity: 1; }
         }
 
         /* VẬT THỂ BAY TỎA RA */
@@ -127,37 +126,57 @@
             display: flex; align-items: center; justify-content: center;
             pointer-events: none; width: max-content; white-space: nowrap;
             animation: radiateOut var(--duration) ease-out forwards;
+            will-change: transform, opacity; /* Bắt buộc để mượt trên điện thoại */
         }
 
         @keyframes radiateOut {
             0% { opacity: 0; transform: translate3d(var(--startX), var(--startY), var(--startZ)) scale(0.1); }
-            8% { opacity: 1; }
-            85% { opacity: 1; }
+            10% { opacity: 1; }
+            80% { opacity: 1; }
             100% { opacity: 0; transform: translate3d(var(--endX), var(--endY), var(--endZ)) scale(1.2); }
         }
 
-        /* STYLING CHỮ */
+        /* STYLING CHỮ VÀ ẢNH (MẶC ĐỊNH CHO PC) */
         .text-grand {
-            font-family: 'Pacifico', cursive; font-size: 3rem;
-            color: #ffe6f2; text-shadow: 0 0 15px #ff3399, 0 0 30px #ff007f;
+            font-family: 'Pacifico', cursive; font-size: 3rem; color: #ffe6f2; 
+            text-shadow: 0 0 15px #ff3399, 0 0 30px #ff007f;
         }
         .text-sub {
             font-size: 1.8rem; font-weight: 800; color: #fff;
             text-shadow: 0 0 12px #ff007f, 0 0 25px #ff66b2;
         }
-
-        /* STYLING KHUNG ẢNH */
         .photo-frame {
-            border-radius: 15px; border: 3px solid rgba(255, 204, 230, 0.9);
-            box-shadow: 0 0 25px rgba(255, 51, 153, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.5);
-            object-fit: cover;
+            border-radius: 12px; border: 3px solid rgba(255, 204, 230, 0.9);
+            box-shadow: 0 0 20px rgba(255, 51, 153, 0.6); object-fit: cover;
+        }
+
+        /* =========================================================
+           TỐI ƯU HÓA RIÊNG CHO ĐIỆN THOẠI VÀ TABLET (CHỐNG LAG)
+           ========================================================= */
+        @media (max-width: 768px) {
+            /* Tắt hoàn toàn hào quang phát sáng (Sát thủ gây lag số 1) */
+            .cake-aura { display: none; }
+            
+            /* Giảm bớt kích thước và bóng mờ của chữ */
+            .text-grand { font-size: 2rem; text-shadow: 0 0 8px #ff3399; }
+            .text-sub { font-size: 1.3rem; text-shadow: 0 0 8px #ff007f; }
+            
+            /* Tắt bóng đổ của viền ảnh */
+            .photo-frame { box-shadow: none; border-width: 2px; }
+            
+            /* Thu nhỏ nến */
+            .candle { top: -90px; height: 40px; box-shadow: 0 0 5px #ff007f; }
+            .flame { top: -15px; width: 15px; height: 15px; box-shadow: 0 0 10px #ffcc00; }
+            
+            /* Nút bấm nhỏ lại */
+            #start-btn { font-size: 1.2rem; padding: 15px 25px; }
         }
     </style>
 </head>
 <body>
 
     <div id="start-screen">
-        <button id="start-btn">🎁 Mừng em VK lên chức người lớn nè! 🎁</button>
+        <button id="start-btn">🎁 Chạm vào đây để mở quà nhé! 🎁</button>
     </div>
 
     <audio id="bgm" loop>
@@ -173,49 +192,49 @@
     </div>
 
     <script>
-        // --- 0. KÍCH HOẠT NHẠC TỪ NÚT MỞ QUÀ ---
+        // --- KIỂM TRA XEM CÓ PHẢI ĐIỆN THOẠI KHÔNG ---
+        const isMobile = window.innerWidth <= 768;
+
         const startScreen = document.getElementById('start-screen');
         const startBtn = document.getElementById('start-btn');
         const audio = document.getElementById('bgm');
 
         startBtn.addEventListener('click', () => {
-            // Phát nhạc
             audio.play();
-            // Mờ dần màn hình
             startScreen.style.opacity = '0';
-            // Xóa hẳn màn hình đi sau 1.5 giây
-            setTimeout(() => {
-                startScreen.style.display = 'none';
-            }, 1500);
+            setTimeout(() => { startScreen.style.display = 'none'; }, 1000);
         });
 
-        // --- 1. HIỆU ỨNG BỤI TIÊN ---
-        document.addEventListener('mousemove', (e) => {
-            if(Math.random() > 0.5) return; 
-            const trail = document.createElement('div');
-            trail.className = 'mouse-trail';
-            trail.style.left = `${e.clientX}px`;
-            trail.style.top = `${e.clientY}px`;
-            const size = Math.random() * 4 + 2;
-            trail.style.width = `${size}px`; trail.style.height = `${size}px`;
-            document.body.appendChild(trail);
-            setTimeout(() => trail.remove(), 1000);
-        });
+        // --- BỤI TIÊN (Chỉ kích hoạt trên máy tính để tránh quá tải điện thoại) ---
+        if (!isMobile) {
+            document.addEventListener('mousemove', (e) => {
+                if(Math.random() > 0.4) return; 
+                const trail = document.createElement('div');
+                trail.className = 'mouse-trail';
+                trail.style.left = `${e.clientX}px`;
+                trail.style.top = `${e.clientY}px`;
+                const size = Math.random() * 4 + 2;
+                trail.style.width = `${size}px`; trail.style.height = `${size}px`;
+                document.body.appendChild(trail);
+                setTimeout(() => trail.remove(), 800);
+            });
+        }
 
-        // --- 2. SAO BĂNG ---
+        // --- SAO BĂNG ---
         function spawnShootingStar() {
             const star = document.createElement('div');
             star.className = 'shooting-star';
             star.style.top = `${Math.random() * 50}vh`; 
             document.body.appendChild(star);
             setTimeout(() => star.remove(), 2000);
-            setTimeout(spawnShootingStar, Math.random() * 5000 + 3000);
+            setTimeout(spawnShootingStar, Math.random() * 6000 + 4000); // Ít sao băng hơn chút
         }
-        setTimeout(spawnShootingStar, 2000);
+        setTimeout(spawnShootingStar, 3000);
 
-        // --- 3. SAO NỀN ---
+        // --- SAO NỀN (Giảm số lượng trên mobile) ---
         const galaxy = document.getElementById('galaxy-bg');
-        for (let i = 0; i < 150; i++) {
+        const numBgStars = isMobile ? 50 : 120; // Mobile chỉ 50 sao, PC 120 sao
+        for (let i = 0; i < numBgStars; i++) {
             const star = document.createElement('div');
             star.className = 'bg-star';
             const size = Math.random() * 2 + 1;
@@ -224,10 +243,11 @@
             star.style.top = `${Math.random() * 100}vh`;
             star.style.backgroundColor = Math.random() > 0.5 ? '#ffffff' : '#ffccf2';
             star.style.animationDelay = `${Math.random() * 2}s`;
+            if (!isMobile && Math.random() > 0.5) star.style.boxShadow = "0 0 8px #ffccf2"; // Đổ bóng nhẹ trên PC
             galaxy.appendChild(star);
         }
 
-        // --- 4. TẠO HÌNH BÁNH KEM ---
+        // --- TẠO HÌNH BÁNH KEM (Thu nhỏ và giảm hạt trên mobile) ---
         const cake = document.getElementById('cake');
         function buildCakeTier(radius, height, yOffset, density) {
             for (let i = 0; i < density; i++) {
@@ -235,9 +255,9 @@
                 star.className = 'cake-particle';
                 star.style.backgroundColor = Math.random() > 0.3 ? '#cc00cc' : '#ff66cc'; 
                 
-                const size = Math.random() * 4 + 2; 
+                // Thu nhỏ kích thước hạt để nhìn đỡ rối mắt
+                const size = Math.random() * 3 + 1.5; 
                 star.style.width = `${size}px`; star.style.height = `${size}px`;
-                star.style.animationDelay = `${Math.random()}s`;
 
                 const angle = Math.random() * Math.PI * 2;
                 let r, y;
@@ -255,10 +275,17 @@
                 cake.appendChild(star);
             }
         }
-        buildCakeTier(160, 60, 60, 450);
-        buildCakeTier(110, 60, -20, 350);
+        
+        // Điều chỉnh kích thước và mật độ bánh theo thiết bị
+        if (isMobile) {
+            buildCakeTier(110, 50, 40, 200);   // Tầng 1 mobile (nhỏ hơn, ít sao hơn)
+            buildCakeTier(70, 50, -10, 150);   // Tầng 2 mobile
+        } else {
+            buildCakeTier(160, 60, 60, 400);   // Tầng 1 PC
+            buildCakeTier(110, 60, -20, 300);  // Tầng 2 PC
+        }
 
-        // --- 5. HỆ THỐNG PHÁT NỘI DUNG TỎA RA ---
+        // --- HỆ THỐNG PHÁT NỘI DUNG TỎA RA ---
         const scene = document.getElementById('scene');
         const itemsData = [
             { type: 'text', content: 'Háp pi bớt đayyyy ', class: 'text-grand' },
@@ -287,10 +314,10 @@
             { type: 'image', src: 'anh12.jpg', w: 200, h: 200 }
         ];
 
-        const SPAWN_RATE = 150; 
+        // Mobile bắn ra chậm hơn (500ms) để không bị nghẽn RAM, PC vẫn nhanh (200ms)
+        const SPAWN_RATE = isMobile ? 500 : 200; 
 
         function spawnItem() {
-            // Không bắn ra hình/chữ nếu màn hình chờ vẫn còn (chưa click mở quà)
             if (startScreen.style.display !== 'none' && startScreen.style.opacity !== '0') return;
 
             const data = itemsData[Math.floor(Math.random() * itemsData.length)];
@@ -306,22 +333,25 @@
                 const img = document.createElement('img');
                 img.className = 'photo-frame';
                 img.src = data.src;
-                img.style.width = `${data.w}px`;
-                img.style.height = `${data.h}px`;
+                // Thu nhỏ ảnh trên mobile để tránh che lấp màn hình
+                const imgScale = isMobile ? 0.7 : 1; 
+                img.style.width = `${data.w * imgScale}px`;
+                img.style.height = `${data.h * imgScale}px`;
                 el.appendChild(img);
             }
 
             const angle = Math.random() * Math.PI * 2; 
-            const startRadius = 150; 
+            const startRadius = isMobile ? 100 : 150; 
             
             const startX = Math.cos(angle) * startRadius;
             const startZ = Math.sin(angle) * startRadius;
-            const startY = (Math.random() * 80) - 20; 
+            const startY = (Math.random() * 60) - 20; 
 
-            const distance = Math.random() * 500 + 400; 
+            // Mobile không nên văng quá xa
+            const distance = isMobile ? (Math.random() * 250 + 150) : (Math.random() * 400 + 300); 
             const endX = startX + (Math.cos(angle) * distance);
             const endZ = startZ + (Math.sin(angle) * distance);
-            const endY = startY + ((Math.random() - 0.5) * 1000); 
+            const endY = startY + ((Math.random() - 0.5) * (isMobile ? 600 : 1000)); 
 
             el.style.setProperty('--startX', `${startX}px`);
             el.style.setProperty('--startY', `${startY}px`);
@@ -330,10 +360,12 @@
             el.style.setProperty('--endY', `${endY}px`);
             el.style.setProperty('--endZ', `${endZ}px`);
 
-            const duration = Math.random() * 2 + 7;
+            const duration = Math.random() * 2 + 6;
             el.style.setProperty('--duration', `${duration}s`);
 
             scene.appendChild(el);
+            
+            // Xóa rác bộ nhớ ngay khi bay xong
             setTimeout(() => { el.remove(); }, duration * 1000);
         }
 
